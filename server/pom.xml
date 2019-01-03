@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.bh.spring-cloud-contract-zip-sample</groupId>
+        <artifactId>spring-cloud-contract-zip-sample</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>server</artifactId>
+    <packaging>jar</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir.parent}/api/src/main/resources/spec.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <library>spring-boot</library>
+                            <validateSpec>true</validateSpec>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <apiPackage>com.bh.sample</apiPackage>
+                            <modelPackage>com.bh.sample</modelPackage>
+                            <generateModels>false</generateModels>
+                            <withXml>true</withXml>
+                            <configOptions>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                                <delegatePattern>true</delegatePattern>
+                                <useBeanValidation>true</useBeanValidation>
+                                <java8>true</java8>
+                                <reactive>false</reactive>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-contract-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <baseClassForTests>com.bh.sample.BaseApiTest</baseClassForTests>
+                    <contractsMode>LOCAL</contractsMode>
+                    <contractsPath>contracts</contractsPath>
+                    <testMode>EXPLICIT</testMode>
+                    <imports>
+                        <import>groovy.util.XmlSlurper</import>
+                    </imports>
+                    <contractDependency>
+                        <groupId>com.bh.spring-cloud-contract-zip-sample</groupId>
+                        <artifactId>api</artifactId>
+                        <version>${project.version}</version>
+                    </contractDependency>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>com.bh.spring-cloud-contract-zip-sample</groupId>
+            <artifactId>api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.parser.v3</groupId>
+            <artifactId>swagger-parser</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>swagger-ui</artifactId>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-contract-verifier</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.bh.spring-cloud-contract-zip-sample</groupId>
+            <artifactId>api</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

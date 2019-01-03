@@ -1,0 +1,29 @@
+openapi: 3.0.2
+info:
+  title: Smple API
+  contact:
+    name: Benoit Heinrich
+    email: benoit.heinrich@gmail.com
+  version: 1.0.0
+
+paths:
+  /export:
+    summary: Export current configuration in zip file
+    get:
+      operationId: exportConfiguration
+      responses:
+        200:
+          description: Zip file
+          headers:
+            content-disposition:
+              schema:
+                type: string
+                description: attachment type
+            Content-Type:
+              schema:
+                type: string
+                description: Content Type application/zip
+          content:
+            application/pdf:
+              schema:
+                type: file

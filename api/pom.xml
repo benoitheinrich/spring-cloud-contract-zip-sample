@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.bh.spring-cloud-contract-zip-sample</groupId>
+        <artifactId>spring-cloud-contract-zip-sample</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>api</artifactId>
+    <packaging>jar</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Used to validate the specs and generate the models that will be shared by the server and clients -->
+                            <inputSpec>${project.basedir}/src/main/resources/spec.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <validateSpec>true</validateSpec>
+                            <modelPackage>com.bh.sample</modelPackage>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <generateApis>false</generateApis>
+                            <withXml>true</withXml>
+                            <configOptions>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                                <useBeanValidation>true</useBeanValidation>
+                                <java8>true</java8>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!-- Used to validate the format of the contracts and generate the stubs for the clients -->
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-contract-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <!-- Do not run tests as we just want to generate the stubs -->
+                    <skipTests>true</skipTests>
+                    <!-- Bundle contracts and stubs within the main resources -->
+                    <stubsDirectory>${project.build.directory}/classes</stubsDirectory>
+                    <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                    <contractsMode>LOCAL</contractsMode>
+                    <contractsPath>contracts</contractsPath>
+                    <jarSkip>true</jarSkip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

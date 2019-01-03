@@ -1,0 +1,14 @@
+description: |
+  Export current configuration
+
+name: exportConfiguration
+request:
+  url: /export
+  method: GET
+
+response:
+  status: 200
+  headers:
+    Content-Type: application/zip
+    content-disposition: "attachment; filename=configuration.zip"
+  bodyFromFileAsBytes: exit101.zip
